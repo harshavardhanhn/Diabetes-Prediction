@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Checkup</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar for patient data input -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Patient Data</h2>
+            </div>
+            
+            <div class="input-container">
+                <label for="gender">Gender</label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="male" name="gender" value="male" checked>
+                        <label for="male">Male</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="female" name="gender" value="female">
+                        <label for="female">Female</label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <label for="pregnancies">Pregnancies</label>
+                <input type="number" id="pregnancies" min="0" max="17" value="0" step="1" placeholder="Enter number of pregnancies" disabled>
+                <div class="input-hint">Range: 0-17</div>
+                <div class="error-message" id="pregnancies-error"></div>
+            </div>
+            
+            <div class="input-container">
+                <label for="glucose">Glucose (mg/dL)</label>
+                <input type="number" id="glucose" min="0" max="200" value="120" step="1" placeholder="Enter glucose level">
+                <div class="input-hint">Range: 0-200 mg/dL</div>
+                <div class="error-message" id="glucose-error"></div>
+            </div>
+            
+            <div class="input-container">
+                <label for="bp">BloodPressure (mm/Hg)</label>
+                <input type="number" id="bp" min="0" max="122" value="70" step="1" placeholder="Enter blood pressure">
+                <div class="input-hint">Range: 0-122 mm/Hg</div>
+                <div class="error-message" id="bp-error"></div>
+            </div>
+            
+            <div class="input-container">
+                <label for="skinthickness">SkinThickness (mm)</label>
+                <input type="number" id="skinthickness" min="0" max="100" value="20" step="1" placeholder="Enter skin thickness">
+                <div class="input-hint">Range: 0-100 mm</div>
+                <div class="error-message" id="skinthickness-error"></div>
+            </div>
+            
+            <div class="input-container">
+                <label for="insulin">Insulin (pmol/L)</label>
+                <input type="number" id="insulin" min="0" max="846" value="79" step="1" placeholder="Enter insulin level">
+                <div class="input-hint">Range: 0-846 pmol/L</div>
+                <div class="error-message" id="insulin-error"></div>
+            </div>
+            
+            <div class="input-container">
+                <label for="bmi">BMI (kg/m²)</label>
+                <input type="number" id="bmi" min="0" max="67" value="20" step="0.1" placeholder="Enter BMI">
+                <div class="input-hint">Range: 0-67 kg/m²</div>
+                <div class="error-message" id="bmi-error"></div>
+            </div>
+            
+            <div class="input-container">
+                <label for="dpf">DiabetesPedigreeFunction</label>
+                <input type="number" id="dpf" min="0.0" max="2.4" value="0.47" step="0.01" placeholder="Enter diabetes pedigree function">
+                <div class="input-hint">Range: 0.0-2.4</div>
+                <div class="error-message" id="dpf-error"></div>
+            </div>
+            
+            <div class="input-container">
+                <label for="age">Age (Years)</label>
+                <input type="number" id="age" min="21" max="88" value="33" step="1" placeholder="Enter age">
+                <div class="input-hint">Range: 21-88 years</div>
+                <div class="error-message" id="age-error"></div>
+            </div>
+            
+            <button id="submit-btn" class="submit-btn">Check Diabetes Risk</button>
+        </div>
+        
+        <!-- Main content area -->
+        <div class="main-content">
+            <div class="header">
+                <h1>Diabetes Checkup</h1>
+            </div>
+            
+            <div class="card">
+                <h2>Patient Data</h2>
+                <div id="patient-data">
+                    <!-- Patient data will be displayed here -->
+                </div>
+            </div>
+            
+            <div id="results-section" style="display: none;">
+                <div class="header">
+                    <h1>Visualised Patient Report</h1>
+                </div>
+                
+                <div class="card">
+                    <h2>Pregnancy count Graph (Others vs Yours)</h2>
+                    <img id="plot1" class="plot-image" alt="Pregnancy count Graph">
+                </div>
+                
+                <div class="card">
+                    <h2>Glucose Value Graph (Others vs Yours)</h2>
+                    <img id="plot2" class="plot-image" alt="Glucose Value Graph">
+                </div>
+                
+                <div class="card">
+                    <h2>BloodPressure Value Graph (Others vs Yours)</h2>
+                    <img id="plot3" class="plot-image" alt="BloodPressure Value Graph">
+                </div>
+                
+                <div class="card">
+                    <h2>Skin Thickness Value Graph (Others vs Yours)</h2>
+                    <img id="plot4" class="plot-image" alt="Skin Thickness Value Graph">
+                </div>
+                
+                <div class="card">
+                    <h2>Insulin Value Graph (Others vs Yours)</h2>
+                    <img id="plot5" class="plot-image" alt="Insulin Value Graph">
+                </div>
+                
+                <div class="card">
+                    <h2>BMI Value Graph (Others vs Yours)</h2>
+                    <img id="plot6" class="plot-image" alt="BMI Value Graph">
+                </div>
+                
+                <div class="card">
+                    <h2>DPF Value Graph (Others vs Yours)</h2>
+                    <img id="plot7" class="plot-image" alt="DPF Value Graph">
+                </div>
+                
+                <div class="card">
+                    <h2>Your Report</h2>
+                    <div id="result" class="result">
+                        <!-- Result will be displayed here -->
+                    </div>
+                    <div id="accuracy" class="accuracy">
+                        <!-- Accuracy will be displayed here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div id="loading" class="loading" style="display: none;">
+                <h3>Analyzing your data and generating report...</h3>
+            </div>
+            
+            <div id="error-message" class="error" style="display: none;">
+                <!-- Error messages will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
