@@ -1,11 +1,11 @@
-from flask import Flask, jsonify, request, send_file, send_from_directory, render_template_string
+from flask import Flask, jsonify, request, send_file, send_from_directory
 from flask_cors import CORS
 import joblib
 import pandas as pd
 import os
 from plot_generator import generate_all_plots
 
-app = Flask(__name__, static_folder='../frontend', static_url_path='')
+app = Flask(__name__)
 CORS(app)
 
 # Load model and input column order once (fast)
@@ -18,12 +18,29 @@ try:
 except:
     accuracy = 0.85  # Default fallback accuracy
 
+# Serve the main HTML page
 @app.route("/")
 def index():
-    # Read and return the HTML file directly
-    with open('../frontend/index.html', 'r') as file:
-        html_content = file.read()
-    return html_content
+    return send_file("../frontend/index.html")
+
+# Serve results page
+@app.route("/results.html")
+def results():
+    return send_file("../frontend/results.html")
+
+# Serve CSS files
+@app.route("/style.css")
+def serve_css():
+    return send_from_directory("../frontend", "style.css")
+
+# Serve JS files
+@app.route("/input-script.js")
+def serve_input_js():
+    return send_from_directory("../frontend", "input-script.js")
+
+@app.route("/results-script.js")
+def serve_results_js():
+    return send_from_directory("../frontend", "results-script.js")
 
 @app.route("/predict", methods=["POST"])
 def predict():

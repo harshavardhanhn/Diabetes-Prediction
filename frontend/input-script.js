@@ -1,4 +1,4 @@
-// Base URL for the Flask backend - adjust if needed
+// Base URL for the Flask backend
 const API_BASE_URL = 'http://localhost:5000';
 
 // User data object
@@ -21,9 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up event listeners for input fields
     setupInputs();
     
-    // Display initial patient data
-    updatePatientData();
-    
     // Set up submit button
     document.getElementById('submit-btn').addEventListener('click', submitData);
 });
@@ -39,7 +36,6 @@ function setupGenderSelection() {
             pregnanciesInput.value = 0;
             pregnanciesInput.disabled = true;
             userData.Pregnancies = 0;
-            updatePatientData();
         }
     });
     
@@ -77,9 +73,6 @@ function setupInputs() {
                 userData[input.key] = value;
                 element.classList.remove('input-error');
                 errorElement.textContent = '';
-                
-                // Update patient data display
-                updatePatientData();
             } else {
                 element.classList.add('input-error');
                 errorElement.textContent = `Please enter a value between ${input.min} and ${input.max}`;
@@ -97,58 +90,6 @@ function setupInputs() {
             }
         });
     });
-}
-
-function updatePatientData() {
-    const gender = document.querySelector('input[name="gender"]:checked').value;
-    const genderDisplay = gender === 'male' ? 'Male' : 'Female';
-    
-    const patientDataHtml = `
-        <table>
-            <tr>
-                <th>Feature</th>
-                <th>Value</th>
-            </tr>
-            <tr>
-                <td>Gender</td>
-                <td>${genderDisplay}</td>
-            </tr>
-            <tr>
-                <td>Pregnancies</td>
-                <td>${userData.Pregnancies}</td>
-            </tr>
-            <tr>
-                <td>Glucose</td>
-                <td>${userData.Glucose}</td>
-            </tr>
-            <tr>
-                <td>BloodPressure</td>
-                <td>${userData.BloodPressure}</td>
-            </tr>
-            <tr>
-                <td>SkinThickness</td>
-                <td>${userData.SkinThickness}</td>
-            </tr>
-            <tr>
-                <td>Insulin</td>
-                <td>${userData.Insulin}</td>
-            </tr>
-            <tr>
-                <td>BMI</td>
-                <td>${userData.BMI}</td>
-            </tr>
-            <tr>
-                <td>DiabetesPedigreeFunction</td>
-                <td>${userData.DiabetesPedigreeFunction}</td>
-            </tr>
-            <tr>
-                <td>Age</td>
-                <td>${userData.Age}</td>
-            </tr>
-        </table>
-    `;
-    
-    document.getElementById('patient-data').innerHTML = patientDataHtml;
 }
 
 function validateAllInputs() {
@@ -193,7 +134,6 @@ function submitData() {
     
     // Show loading indicator
     document.getElementById('loading').style.display = 'block';
-    document.getElementById('results-section').style.display = 'none';
     document.getElementById('submit-btn').disabled = true;
     
     // Send data to Flask backend
@@ -201,7 +141,7 @@ function submitData() {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            },
+        },
         body: JSON.stringify(userData)
     })
     .then(response => {
@@ -219,8 +159,10 @@ function submitData() {
             throw new Error(data.error);
         }
         
-        // Display results
-        displayResults(data);
+        // Store results in sessionStorage and redirect to results page
+        sessionStorage.setItem('predictionData', JSON.stringify(data));
+        sessionStorage.setItem('userData', JSON.stringify(userData));
+        window.location.href = '/results.html';
     })
     .catch(error => {
         // Hide loading indicator and show error
@@ -231,33 +173,4 @@ function submitData() {
             `Error: ${error.message}. Please make sure the Flask server is running.`;
         console.error('Error:', error);
     });
-}
-
-function displayResults(data) {
-    // Show results section
-    document.getElementById('results-section').style.display = 'block';
-    
-    // Display prediction result
-    const resultElement = document.getElementById('result');
-    if (data.prediction === 1) {
-        resultElement.textContent = 'You are Diabetic';
-        resultElement.className = 'result diabetic';
-    } else {
-        resultElement.textContent = 'You are not Diabetic';
-        resultElement.className = 'result healthy';
-    }
-    
-    // Display accuracy if available
-    if (data.accuracy) {
-        document.getElementById('accuracy').textContent = `Accuracy: ${data.accuracy}%`;
-    }
-    
-    // Load plot images
-    if (data.plots && data.plots.length === 7) {
-        for (let i = 0; i < 7; i++) {
-            const plotElement = document.getElementById(`plot${i+1}`);
-            // Add timestamp to prevent caching
-            plotElement.src = `${API_BASE_URL}${data.plots[i]}?t=${new Date().getTime()}`;
-        }
-    }
 }

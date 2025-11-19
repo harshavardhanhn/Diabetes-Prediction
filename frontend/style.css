@@ -5,6 +5,7 @@
     --border-color: #DCDCDC;
     --success-color: #09BD3C;
     --danger-color: #FF4B4B;
+    --card-bg: #FFFFFF;
 }
 
 * {
@@ -21,63 +22,107 @@ body {
 }
 
 .container {
-    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
     min-height: 100vh;
 }
 
-/* Sidebar Styles */
-.sidebar {
-    width: 350px;
-    background-color: white;
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    overflow-y: auto;
+/* Header Styles */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border-color);
 }
 
-.sidebar-header {
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.sidebar-header h2 {
+.header h1 {
     color: var(--primary-color);
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.header p {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.back-btn:hover {
+    background-color: #e04444;
+}
+
+/* Card Styles */
+.card {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-left: 4px solid var(--primary-color);
+}
+
+.card h2 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
     font-size: 1.5rem;
 }
 
+/* Input Page Styles */
+.input-page {
+    max-width: 800px;
+}
+
+.input-form {
+    margin-bottom: 30px;
+}
+
 .input-container {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .input-container label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
+    font-size: 1rem;
 }
 
 .input-container input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 1rem;
+    transition: all 0.3s;
 }
 
 .input-container input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(255, 75, 75, 0.2);
+    box-shadow: 0 0 0 3px rgba(255, 75, 75, 0.1);
 }
 
 .input-container input:disabled {
-    background-color: #f5f5f5;
-    color: #999;
+    background-color: #f8f9fa;
+    color: #6c757d;
     cursor: not-allowed;
 }
 
 .input-hint {
     font-size: 0.8rem;
-    color: #666;
+    color: #6c757d;
     margin-top: 5px;
 }
 
@@ -90,7 +135,7 @@ body {
 .radio-option {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 8px;
 }
 
 .radio-option input[type="radio"] {
@@ -99,15 +144,16 @@ body {
 
 .submit-btn {
     width: 100%;
-    padding: 12px;
+    padding: 15px;
     background-color: var(--primary-color);
     color: white;
     border: none;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: bold;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 10px;
+    transition: background-color 0.3s;
 }
 
 .submit-btn:hover {
@@ -119,36 +165,58 @@ body {
     cursor: not-allowed;
 }
 
-/* Main Content Styles */
-.main-content {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
+/* Results Page Styles */
+.results-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
 }
 
-.header {
-    margin-bottom: 30px;
+@media (min-width: 992px) {
+    .results-content {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .result-card, .patient-data-card {
+        grid-column: span 1;
+    }
+    
+    .visualization-card {
+        grid-column: span 2;
+    }
 }
 
-.header h1 {
-    color: var(--primary-color);
-    font-size: 2.2rem;
-    margin-bottom: 10px;
-}
-
-.header h2 {
-    font-size: 1.5rem;
-    margin: 20px 0 10px;
-}
-
-.card {
-    background-color: white;
+/* Result Display */
+.result {
+    text-align: center;
+    padding: 30px;
+    margin: 20px 0;
     border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 2rem;
+    font-weight: bold;
+    border: 3px solid transparent;
 }
 
+.healthy {
+    background-color: rgba(9, 189, 60, 0.1);
+    color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+.diabetic {
+    background-color: rgba(255, 75, 75, 0.1);
+    color: var(--danger-color);
+    border-color: var(--danger-color);
+}
+
+.accuracy {
+    font-size: 1.3rem;
+    margin-top: 15px;
+    text-align: center;
+    color: #666;
+}
+
+/* Patient Data Table */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -160,87 +228,135 @@ table, th, td {
 }
 
 th, td {
-    padding: 8px 12px;
+    padding: 12px;
     text-align: left;
 }
 
 th {
     background-color: var(--secondary-color);
+    font-weight: 600;
 }
 
-.chart-container {
-    height: 400px;
-    margin-bottom: 30px;
+/* Graph Controls */
+.graph-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background-color: var(--secondary-color);
+    border-radius: 5px;
 }
 
-.result {
-    text-align: center;
-    padding: 20px;
-    margin: 20px 0;
-    border-radius: 10px;
-    font-size: 1.8rem;
-    font-weight: bold;
+.graph-controls label {
+    font-weight: 600;
+    color: var(--text-color);
 }
 
-.healthy {
-    background-color: rgba(9, 189, 60, 0.2);
-    color: var(--success-color);
+.graph-controls select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: white;
 }
 
-.diabetic {
-    background-color: rgba(255, 75, 75, 0.2);
-    color: var(--danger-color);
-}
-
-.accuracy {
-    font-size: 1.2rem;
-    margin-top: 10px;
+/* Graph Container */
+.graph-container {
     text-align: center;
 }
 
 .plot-image {
     width: 100%;
     max-width: 800px;
-    margin: 10px auto;
+    margin: 0 auto 20px;
     display: block;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+.graph-description {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: left;
+    padding: 20px;
+    background-color: var(--secondary-color);
+    border-radius: 8px;
+}
+
+.graph-description h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+/* Loading and Error States */
 .loading {
     text-align: center;
-    padding: 20px;
+    padding: 40px;
     color: #666;
+}
+
+.loading h3 {
+    margin-bottom: 20px;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--primary-color);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 .error {
     text-align: center;
-    padding: 20px;
+    padding: 30px;
     color: var(--danger-color);
     background-color: rgba(255, 75, 75, 0.1);
-    border-radius: 5px;
-    margin: 10px 0;
+    border-radius: 10px;
+    margin: 20px 0;
+    border-left: 4px solid var(--danger-color);
 }
 
 .input-error {
     border-color: var(--danger-color) !important;
-    box-shadow: 0 0 0 2px rgba(255, 75, 75, 0.2) !important;
+    box-shadow: 0 0 0 3px rgba(255, 75, 75, 0.1) !important;
 }
 
 .error-message {
     color: var(--danger-color);
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     margin-top: 5px;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        flex-direction: column;
+        padding: 15px;
     }
     
-    .sidebar {
-        width: 100%;
-        height: auto;
+    .header h1 {
+        font-size: 2rem;
+    }
+    
+    .card {
+        padding: 20px;
+    }
+    
+    .result {
+        font-size: 1.5rem;
+        padding: 20px;
+    }
+    
+    .graph-controls {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

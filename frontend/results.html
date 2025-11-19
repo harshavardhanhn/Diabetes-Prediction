@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Checkup - Results</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container results-page">
+        <div class="header">
+            <h1>Diabetes Checkup Results</h1>
+            <a href="/" class="back-btn">← Back to Input</a>
+        </div>
+        
+        <div class="results-content">
+            <div class="card result-card">
+                <h2>Your Report</h2>
+                <div id="result" class="result">
+                    <!-- Result will be displayed here -->
+                </div>
+                <div id="accuracy" class="accuracy">
+                    <!-- Accuracy will be displayed here -->
+                </div>
+            </div>
+            
+            <div class="card patient-data-card">
+                <h2>Patient Data Summary</h2>
+                <div id="patient-data">
+                    <!-- Patient data will be displayed here -->
+                </div>
+            </div>
+            
+            <div class="card visualization-card">
+                <h2>Visualization</h2>
+                <div class="graph-controls">
+                    <label for="graph-selector">Select Graph:</label>
+                    <select id="graph-selector">
+                        <option value="1">Pregnancy Count Graph</option>
+                        <option value="2">Glucose Value Graph</option>
+                        <option value="3">BloodPressure Value Graph</option>
+                        <option value="4">Skin Thickness Graph</option>
+                        <option value="5">Insulin Value Graph</option>
+                        <option value="6">BMI Value Graph</option>
+                        <option value="7">DPF Value Graph</option>
+                    </select>
+                </div>
+                
+                <div class="graph-container">
+                    <img id="current-graph" class="plot-image" alt="Selected Graph">
+                    <div class="graph-description">
+                        <h3 id="graph-title">Pregnancy Count Graph</h3>
+                        <p id="graph-description">This graph shows the relationship between age and number of pregnancies, comparing your data with the dataset.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/results-script.js"></script>
+</body>
+</html>
