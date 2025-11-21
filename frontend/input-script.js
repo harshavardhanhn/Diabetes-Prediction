@@ -13,6 +13,9 @@ let userData = {
     Age: 33
 };
 
+// Store gender separately since it's not part of the ML model
+let userGender = 'male';
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     // Set up event listeners for gender radio buttons
@@ -30,12 +33,16 @@ function setupGenderSelection() {
     const femaleRadio = document.getElementById('female');
     const pregnanciesInput = document.getElementById('pregnancies');
     
+    // Set initial gender state
+    userGender = maleRadio.checked ? 'male' : 'female';
+    
     maleRadio.addEventListener('change', function() {
         if (this.checked) {
             // Set pregnancies to 0 and disable the input for males
             pregnanciesInput.value = 0;
             pregnanciesInput.disabled = true;
             userData.Pregnancies = 0;
+            userGender = 'male';
         }
     });
     
@@ -43,6 +50,7 @@ function setupGenderSelection() {
         if (this.checked) {
             // Enable pregnancies input for females
             pregnanciesInput.disabled = false;
+            userGender = 'female';
         }
     });
 }
@@ -64,9 +72,16 @@ function setupInputs() {
         const element = document.getElementById(input.id);
         const errorElement = document.getElementById(`${input.id}-error`);
         
+        // Set initial values in userData
+        if (input.step) {
+            userData[input.key] = parseFloat(element.value);
+        } else {
+            userData[input.key] = parseInt(element.value);
+        }
+        
         element.addEventListener('input', function() {
             // Validate input
-            const value = parseFloat(this.value);
+            const value = input.step ? parseFloat(this.value) : parseInt(this.value);
             const isValid = !isNaN(value) && value >= input.min && value <= input.max;
             
             if (isValid) {
@@ -81,7 +96,7 @@ function setupInputs() {
         
         // Validate on blur as well
         element.addEventListener('blur', function() {
-            const value = parseFloat(this.value);
+            const value = input.step ? parseFloat(this.value) : parseInt(this.value);
             const isValid = !isNaN(value) && value >= input.min && value <= input.max;
             
             if (!isValid) {
@@ -108,7 +123,7 @@ function validateAllInputs() {
     inputs.forEach(input => {
         const element = document.getElementById(input.id);
         const errorElement = document.getElementById(`${input.id}-error`);
-        const value = parseFloat(element.value);
+        const value = input.step ? parseFloat(element.value) : parseInt(element.value);
         
         if (isNaN(value) || value < input.min || value > input.max) {
             element.classList.add('input-error');
@@ -136,13 +151,25 @@ function submitData() {
     document.getElementById('loading').style.display = 'block';
     document.getElementById('submit-btn').disabled = true;
     
+    // Create a copy of userData for sending to backend (without any extra fields)
+    const dataToSend = {
+        Pregnancies: userData.Pregnancies,
+        Glucose: userData.Glucose,
+        BloodPressure: userData.BloodPressure,
+        SkinThickness: userData.SkinThickness,
+        Insulin: userData.Insulin,
+        BMI: userData.BMI,
+        DiabetesPedigreeFunction: userData.DiabetesPedigreeFunction,
+        Age: userData.Age
+    };
+    
     // Send data to Flask backend
     fetch(`${API_BASE_URL}/predict`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(dataToSend)
     })
     .then(response => {
         if (!response.ok) {
@@ -162,6 +189,7 @@ function submitData() {
         // Store results in sessionStorage and redirect to results page
         sessionStorage.setItem('predictionData', JSON.stringify(data));
         sessionStorage.setItem('userData', JSON.stringify(userData));
+        sessionStorage.setItem('userGender', userGender);
         window.location.href = '/results.html';
     })
     .catch(error => {

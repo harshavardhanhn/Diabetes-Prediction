@@ -38,22 +38,26 @@ document.addEventListener('DOMContentLoaded', function() {
     // Get stored data
     const predictionData = JSON.parse(sessionStorage.getItem('predictionData'));
     const userData = JSON.parse(sessionStorage.getItem('userData'));
+    const userGender = sessionStorage.getItem('userGender');
     
     // Check if we have the required data
-    if (!predictionData || !userData) {
+    if (!predictionData || !userData || !userGender) {
         // Redirect back to input page if no data
         window.location.href = '/';
         return;
     }
     
     // Display results
-    displayResults(predictionData, userData);
+    displayResults(predictionData, userData, userGender);
     
     // Set up graph selector
     setupGraphSelector(predictionData);
 });
 
-function displayResults(predictionData, userData) {
+function displayResults(predictionData, userData, userGender) {
+    console.log("Displaying results with data:", userData);
+    console.log("Gender:", userGender);
+    
     // Display prediction result
     const resultElement = document.getElementById('result');
     if (predictionData.prediction === 1) {
@@ -70,8 +74,7 @@ function displayResults(predictionData, userData) {
     }
     
     // Display patient data
-    const gender = document.querySelector('input[name="gender"]:checked')?.value || 'male';
-    const genderDisplay = gender === 'male' ? 'Male' : 'Female';
+    const genderDisplay = userGender === 'male' ? 'Male' : 'Female';
     
     const patientDataHtml = `
         <table>
@@ -139,7 +142,8 @@ function setupGraphSelector(predictionData) {
     function loadGraph(graphNumber, predictionData) {
         if (predictionData.plots && predictionData.plots.length >= graphNumber) {
             // Add timestamp to prevent caching
-            currentGraph.src = `${API_BASE_URL}${predictionData.plots[graphNumber-1]}?t=${new Date().getTime()}`;
+            const timestamp = new Date().getTime();
+            currentGraph.src = `${API_BASE_URL}${predictionData.plots[graphNumber-1]}?t=${timestamp}`;
             
             // Update graph info
             const graphInfo = graphDescriptions[graphNumber];
@@ -147,6 +151,12 @@ function setupGraphSelector(predictionData) {
                 graphTitle.textContent = graphInfo.title;
                 graphDescription.textContent = graphInfo.description;
             }
+            
+            // Handle image loading errors
+            currentGraph.onerror = function() {
+                console.error(`Failed to load graph ${graphNumber}`);
+                currentGraph.alt = `Graph ${graphNumber} failed to load`;
+            };
         }
     }
 }

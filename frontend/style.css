@@ -360,3 +360,16 @@ th {
         align-items: flex-start;
     }
 }
+/* Add this to the existing CSS file for debugging */
+
+.debug-info {
+    display: none; /* Keep hidden by default */
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #6c757d;
+}
